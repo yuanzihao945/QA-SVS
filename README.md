@@ -10,4 +10,4 @@ Folder "4.R_code" contains the R codes of the algorithms and the simulations of 
 
 Contact: zihaoyuan@whut.edu.cn
 
-If you use this code set, please refer to this code set and this paper..
+If you use this code set, please refer to this code set and this paper.
