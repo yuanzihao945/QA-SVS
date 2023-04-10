@@ -24,7 +24,7 @@ function [Fv, Fvs, upsilonk_hat, upsilon_hat] = QA_SVS(X, Y, dn)
 
 
 [N, P] = size(X);           % size of sample matrix
-if ~exist('dn', 'var')  || isempty(dn)
+if exist('dn', 'var') == 0 || isempty(dn)
     dn = min([round(N / log(N)) P]); % given the number screening last
 end
 if dn < 1
@@ -37,9 +37,6 @@ K = length(YC);             % number of class
 
 [~, Xp] = sort(X, 'descend');
 [~, SX] = sort(Xp);
-
-rhok = max([- norminv(1 / (2*P)), 3]);  % Filter operator
-rho = (K - 1) * rhok ^2;
 
 pk_hati = zeros(K, 1);
 tauk_hat = zeros(K, P);
@@ -59,6 +56,9 @@ Fvs = [Fvsk; Fvsall];
 switch dn
 
     case 'AFD'
+        rhok = max([- norminv(1 / (2*P)), 3])^2;  % Filter operator
+        rho = (K - 1) / K * rhok;
+
         % Screening the sufficient variables by adaptive false discovery
         Fv = cell(1, K+1);
         for k = 1 : K
@@ -81,7 +81,6 @@ switch dn
         if ~isnan(FDRoptindex)
             Fv{k+1} = unique(Fvsall(1 : FDRoptindex(end)));
         end
-
 
     otherwise
         % Screening the sufficient variables by the dn top largest
